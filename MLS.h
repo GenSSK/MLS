@@ -2,6 +2,9 @@
 // Created by Genki Sasaki on 2021/02/18.
 //
 
+#ifndef PCT_ARCS6_MSEQUENCE_H
+#define PCT_ARCS6_MSEQUENCE_H
+
 #include <iostream>
 #include <cmath>
 #include <cstdint>
