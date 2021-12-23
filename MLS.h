@@ -13,27 +13,29 @@
 #include <iterator>
 #include <random>
 
+/*!
+ * @brief M系列信号を生成するクラス
+ * */
 class MLS {
 public:
-    //! @brief Constructor
     explicit MLS(int ShiftRegister);
-    //! @brief Destructor
-    ~MLS();
-    void SignalGenerate();
+    ~MLS() = default;
     int SignalGet();
 
 private:
-    int N;  // Shift Register
-    int L;  // Long
+	void SignalGenerate();
 
-    std::vector<int> F;
-    std::vector<int> D;
+    int N;  //!<シフトレジスタの数
+    int L;  //!<MLSの長さ
 
-    bool done_flag = false;
+    std::vector<int> F; //!<係数
+    std::vector<int> D; //!<MLSを格納するベクタ
 
-    std::random_device rnd;
-    std::mt19937 mt;
-    std::uniform_int_distribution<int> rand_tar;
+    bool done_flag = false; //!<MLS生成終了フラグ
+
+    std::random_device rnd; //!<ランダム数を取得
+    std::mt19937 mt;		//!<メルセンヌ・ツイスタ
+    std::uniform_int_distribution<int> rand_tar;	//!<等確率の乱数生成
     
 };
 
