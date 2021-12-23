@@ -23,7 +23,6 @@ MLS::MLS(const int ShiftRegister) :
     SignalGenerate();
 }
 
-
 /*!
  * @brief MLSを生成する関数
  * */
