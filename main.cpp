@@ -1,3 +1,11 @@
+/*!
+ * @file    main.cpp
+ * @brief   テスト
+ * @author  G.Sasaki
+ * @date    2021/2/18
+ * @details M系列信号を使う
+ * */
+
 #include <iostream>
 #include "MLS.h"
 
