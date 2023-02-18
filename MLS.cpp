@@ -28,21 +28,26 @@ MLS::MLS(const int ShiftRegister) :
  * */
 void MLS::SignalGenerate() {
 
-    while (!done_flag) {
+	while (!done_flag) {
 		/* 初期値を生成 */
-        while (1) {
-            srand((unsigned int) time(NULL));
-            int x = 0, y = 0, z = 0;
-            for (int i = 0; i < N; i++) {
-                F[i] = rand_tar(mt);
-                F[0] = 1;
-                D[i] = rand_tar(mt);
-                x += D[i];
-                y += F[i];
-                z += D[i] * F[i];
-            }
-            if (x > 0 && x < N && y > 0 && y < N && z > 0 && z < N) break;
-        }
+		while (1) {
+			std::cout << (unsigned int) time(NULL) << std::endl;
+		    int x = 0, y = 0, z = 0;
+		    for (int i = 0; i < N; i++) {
+		        F[i] = rand_tar(mt);
+		        F[0] = 1;
+		        D[i] = rand_tar(mt);
+		        x += D[i];
+		        y += F[i];
+		        z += D[i] * F[i];
+		    }
+		    if (x > 0 && x < N && y > 0 && y < N && z > 0 && z < N) {
+				break;
+			} else {
+				mt.seed(rnd());
+			}
+		}
+		std::cout << "初期値生成完了" << std::endl;
 
 		/* MLSを計算 */
         for (int i = N; i < L; ++i) {
@@ -54,18 +59,51 @@ void MLS::SignalGenerate() {
             }
             D[i] = buf;
         }
+		std::cout << "MLS生成完了" << std::endl;
 
 		/* 生成したMLSが正常か判断する */
         auto v1 = std::next(D.begin(), 0);
         for (int i = 0; i < L - N; ++i) {
+			// 1がN回続いているデータがあるか判断
             if (std::accumulate(std::next(v1, i), std::next(v1, i + N), 0) == N){
                 for (int i = 0; i < L - N + 1; ++i) {
-                    if (std::accumulate(std::next(v1, i), std::next(v1, i + N - 1), 0) == 0){
+                    // 0がN回続いているデータがあるか判断
+					if (std::accumulate(std::next(v1, i), std::next(v1, i + N - 1), 0) == 0){
+						// 全データの合計が(L + 1) / 2になっているか判断
                         if (std::accumulate(std::next(v1, 0), std::next(v1, L), 0) == (L + 1) / 2) done_flag = true;
                     }
                 }
             }
         }
+//		if (std::accumulate(std::next(D.begin(), 0), std::next(D.begin(), L), 0) == (L + 1) / 2){
+//			for (int i = 0; i < L - N; ++i) {
+//
+//			}
+//		}
+//		done_flag = true;
+
+		int max = 0;  /* 1の連続数の最大値 */
+		int cur = 0;  /* 現在の1の連続数 */
+		int i;  /* ループカウンタ */
+
+		for(i = 0; i < N; ++i)
+		{
+			if (D[i] == '0')
+			{
+				if (max < cur)
+				{
+					/* もし、現在の連続数が最大値より大きければ、最大値を更新 */
+					max = cur;
+				}
+				cur = 0;
+			}
+			else
+			{
+				++cur;
+			}
+		}
+
+		printf("2進数(%s)で1の連続する最大数は %d 個です。\n", value, max);
     }
 
 }

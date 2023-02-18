@@ -1,9 +1,12 @@
-//
-// Created by Genki Sasaki on 2021/02/18.
-//
+/*!
+ * @file    MLS.h
+ * @brief   M系列信号を生成するクラス
+ * @author  G.Sasaki
+ * @date    2021/2/18
+ * */
 
-#ifndef PCT_ARCS6_MSEQUENCE_H
-#define PCT_ARCS6_MSEQUENCE_H
+#ifndef MSEQUENCE_H
+#define MSEQUENCE_H
 
 #include <iostream>
 #include <cmath>
@@ -40,4 +43,4 @@ private:
 };
 
 
-#endif //PCT_ARCS6_MSEQUENCE_H
+#endif //MSEQUENCE_H
