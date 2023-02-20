@@ -6,7 +6,7 @@
  * */
 
 #include "MLS.h"
-#include <time.h>
+#include <ctime>
 
 /*!
  * @brief　コンストラクタ
@@ -47,63 +47,49 @@ void MLS::SignalGenerate() {
 				mt.seed(rnd());
 			}
 		}
-		std::cout << "初期値生成完了" << std::endl;
 
 		/* MLSを計算 */
         for (int i = N; i < L; ++i) {
             int buf = 0;
             int buf2 = 0;
-            buf = D[i - N] * F[0];
+            buf = D[i - N] * F[0];  //0番目の計算
             for (int j = 1; j < N; j++) {
-                buf = (buf + (D[i - N + j] * F[j])) % 2;
+                buf = (buf + (D[i - N + j] * F[j])) % 2; //1~Nまで排他的論理和をステップで計算
             }
-            D[i] = buf;
+            D[i] = buf; //出力を格納
         }
-		std::cout << "MLS生成完了" << std::endl;
 
-		/* 生成したMLSが正常か判断する */
-        auto v1 = std::next(D.begin(), 0);
-        for (int i = 0; i < L - N; ++i) {
-			// 1がN回続いているデータがあるか判断
-            if (std::accumulate(std::next(v1, i), std::next(v1, i + N), 0) == N){
-                for (int i = 0; i < L - N + 1; ++i) {
-                    // 0がN回続いているデータがあるか判断
-					if (std::accumulate(std::next(v1, i), std::next(v1, i + N - 1), 0) == 0){
-						// 全データの合計が(L + 1) / 2になっているか判断
-                        if (std::accumulate(std::next(v1, 0), std::next(v1, L), 0) == (L + 1) / 2) done_flag = true;
-                    }
-                }
-            }
-        }
-//		if (std::accumulate(std::next(D.begin(), 0), std::next(D.begin(), L), 0) == (L + 1) / 2){
-//			for (int i = 0; i < L - N; ++i) {
-//
-//			}
-//		}
-//		done_flag = true;
-
-		int max = 0;  /* 1の連続数の最大値 */
-		int cur = 0;  /* 現在の1の連続数 */
-		int i;  /* ループカウンタ */
-
-		for(i = 0; i < N; ++i)
-		{
-			if (D[i] == '0')
-			{
-				if (max < cur)
-				{
-					/* もし、現在の連続数が最大値より大きければ、最大値を更新 */
-					max = cur;
-				}
-				cur = 0;
+		/* 生成したMLSが正常か判断する（新板） */
+		bool n_flag = false, zero_flag = false;
+		int n = 0, zero = 0, all_sum = 0;
+		for (int i = 0; i < L; ++i) {
+			if(D[i] == 0) {
+				zero++;
+				if (zero == N - 1) zero_flag = true;
+				n = 0;
+			} else {
+				n++;
+				if(n == N) n_flag = true;
+				zero = 0;
 			}
-			else
-			{
-				++cur;
-			}
+			all_sum += D[i];
 		}
+		if(zero_flag && n_flag && all_sum == (L + 1) / 2) done_flag = true;
 
-		printf("2進数(%s)で1の連続する最大数は %d 個です。\n", value, max);
+//		/* 生成したMLSが正常か判断する（旧版） */
+//        auto v1 = std::next(D.begin(), 0);
+//        for (int i = 0; i < L - N; ++i) {
+//			// 1がN回続いているデータがあるか判断
+//            if (std::accumulate(std::next(v1, i), std::next(v1, i + N), 0) == N){
+//                for (int i = 0; i < L - N + 1; ++i) {
+//                    // 0がN回続いているデータがあるか判断
+//					if (std::accumulate(std::next(v1, i), std::next(v1, i + N - 1), 0) == 0){
+//						// 全データの合計が(L + 1) / 2になっているか判断
+//                        if (std::accumulate(std::next(v1, 0), std::next(v1, L), 0) == (L + 1) / 2) done_flag = true;
+//                    }
+//                }
+//            }
+//        }
     }
 
 }
