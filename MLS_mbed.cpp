@@ -6,18 +6,15 @@
  * */
 
 #include "MLS.h"
-#include <ctime>
+#include <cstdio>
 
 /*!
  * @brief　コンストラクタ
  * @param[in] ShiftRegister	シフトレジスタの数（20とかだと生成が重くなるッ！！)
  * */
 MLS::MLS(const int ShiftRegister) :
-        mt(rnd()),
-        rand_tar(0, 1),
         F(ShiftRegister, 0),
         D((int)(std::pow(2, ShiftRegister) - 1), 0) {
-
     N = ShiftRegister;
     L = (int) std::pow(2, N) - 1;
     SignalGenerate();
@@ -31,20 +28,17 @@ void MLS::SignalGenerate() {
 	while (!done_flag) {
 		/* 初期値を生成 */
 		while (1) {
-			std::cout << (unsigned int) time(NULL) << std::endl;
 		    int x = 0, y = 0, z = 0;
 		    for (int i = 0; i < N; i++) {
-		        F[i] = rand_tar(mt);
+		        F[i] = rand() % 2;
 		        F[0] = 1;
-		        D[i] = rand_tar(mt);
+		        D[i] = rand() % 2;
 		        x += D[i];
 		        y += F[i];
 		        z += D[i] * F[i];
 		    }
 		    if (x > 0 && x < N && y > 0 && y < N && z > 0 && z < N) {
 				break;
-			} else {
-				mt.seed(rnd());
 			}
 		}
 
@@ -57,6 +51,7 @@ void MLS::SignalGenerate() {
             }
             D[i] = buf; //出力を格納
         }
+
 
 		/* 生成したMLSが正常か判断する（新板） */
 		bool n_flag = false, zero_flag = false;
@@ -75,20 +70,22 @@ void MLS::SignalGenerate() {
 		}
 		if(zero_flag && n_flag && all_sum == (L + 1) / 2) done_flag = true;
 
-//		/* 生成したMLSが正常か判断する（旧版） */
-//        auto v1 = std::next(D.begin(), 0);
-//        for (int i = 0; i < L - N; ++i) {
-//			// 1がN回続いているデータがあるか判断
-//            if (std::accumulate(std::next(v1, i), std::next(v1, i + N), 0) == N){
-//                for (int i = 0; i < L - N + 1; ++i) {
-//                    // 0がN回続いているデータがあるか判断
-//					if (std::accumulate(std::next(v1, i), std::next(v1, i + N - 1), 0) == 0){
-//						// 全データの合計が(L + 1) / 2になっているか判断
-//                        if (std::accumulate(std::next(v1, 0), std::next(v1, L), 0) == (L + 1) / 2) done_flag = true;
-//                    }
-//                }
-//            }
-//        }
+//        printf("evaluated...\r\n");
+
+	// 	/* 生成したMLSが正常か判断する（旧版） */
+    //    auto v1 = std::next(D.begin(), 0);
+    //    for (int i = 0; i < L - N; ++i) {
+	// 		// 1がN回続いているデータがあるか判断
+    //        if (std::accumulate(std::next(v1, i), std::next(v1, i + N), 0) == N){
+    //            for (int i = 0; i < L - N + 1; ++i) {
+    //                // 0がN回続いているデータがあるか判断
+	// 				if (std::accumulate(std::next(v1, i), std::next(v1, i + N - 1), 0) == 0){
+	// 					// 全データの合計が(L + 1) / 2になっているか判断
+    //                    if (std::accumulate(std::next(v1, 0), std::next(v1, L), 0) == (L + 1) / 2) done_flag = true;
+    //                }
+    //            }
+    //        }
+    //    }
     }
 
 }

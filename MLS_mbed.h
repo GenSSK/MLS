@@ -1,6 +1,6 @@
 /*!
  * @file    MLS.h
- * @brief   M系列信号を生成するクラス
+ * @brief   M系列信号を生成するクラス（mbed版）
  * @author  G.Sasaki
  * @date    2021/2/18
  * */
@@ -14,7 +14,6 @@
 #include <vector>
 #include <numeric>
 #include <iterator>
-#include <random>
 
 /*!
  * @brief M系列信号を生成するクラス
@@ -36,10 +35,6 @@ private:
 
     bool done_flag = false; //!<MLS生成終了フラグ
 
-    std::random_device rnd; //!<ランダム数を取得
-    std::mt19937 mt;		//!<メルセンヌ・ツイスタ
-    std::uniform_int_distribution<int> rand_tar;	//!<等確率の乱数生成
-    
 };
 
 
