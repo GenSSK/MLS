@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "MLS.h"
+//#include "MLS_mbed.h"
 
 int main() {
     MLS mls{10}; //MLS信号のコンストラクタを呼ぶ（引数はシフトレジスタの次数）

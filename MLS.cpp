@@ -51,7 +51,6 @@ void MLS::SignalGenerate() {
 		/* MLSを計算 */
         for (int i = N; i < L; ++i) {
             int buf = 0;
-            int buf2 = 0;
             buf = D[i - N] * F[0];  //0番目の計算
             for (int j = 1; j < N; j++) {
                 buf = (buf + (D[i - N + j] * F[j])) % 2; //1~Nまで排他的論理和をステップで計算
